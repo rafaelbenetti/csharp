@@ -193,10 +193,31 @@ GC.Collect();
  - None of sides are required.
 
 ## Index
- - TODO
+ - [Advantages] Provides a way to improve the performance of your Queries.
+ - [Advantages] They are one of the best ways to improve performance in a database application.
+ - [Advantages] Putting in the columns that are queried together will improve your response time.
+ - [Disadvantages] Too many indices may actually decrease performance.
+ - [Disadvantages] They decrease performance on inserts, updates, and deletes.
+ - You should only create indexes when they are actually needed.
 
-### Clustered Index
- - TODO
+### Clustered Index 
+ - A clustered index alters the way that the rows are stored. 
+    - With a clustered index the rows are stored physically on the disk in the same order as the index.
+ - Every table can have exactly one clustered index.
+ - You can create a clustered index that covers more than one column. For example: create Index index_name(col1, col2, col.....).
 
-### Nonlustered Index
- - TODO
+ ```sql
+ CREATE CLUSTERED INDEX IX_TABLE_COLUMN
+    ON dbo.TABLE (COLUMN);   
+ ```
+
+### Nonclustered Index
+ - Does not alter the way the rows are stored in the table.
+ - There is a second list that has pointers to the physical rows.
+ - You can have many non clustered indexes.
+    - Although each new index will increase the time it takes to write new records.
+
+ ```sql
+ CREATE INDEX IX_TABLE_COLUMN
+    ON dbo.TABLE (COLUMN);   
+ ```
