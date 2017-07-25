@@ -18,8 +18,11 @@
 * [Thread Syncronization](#thread-syncronization)
     * [Lock](#lock)
     * [Mutex](#mutex)
+    * [Semaphore](#semaphore)
+    * [Deadlock](#deadlock)
 * [Async Await](#async-await)
 * [Inheritance Class Limitation](#inheritance-class-limitation)
+* [Why string is immutable](#why-string-is-immutable)
 * [Joins](#joins)
     * [Inner Join](#inner-join)
     * [Left Join](#left-join)
@@ -150,15 +153,108 @@ GC.Collect();
  - And adds additional CPU overhead as the processor context-switch between threads.
  - Operations: you can Abort() or Suspend() or Resume()
 
-## Thread Syncronization
- - TODO
+# Thread Syncronization
 
 ## Lock
- - TODO
+ - The lock keyword ensures that one thread does not enter a critical section of code while another thread is in the critical section. If another thread tries to enter a locked code, it will wait, block, until the object is released.
+
+ - The lock keyword calls Enter at the start of the block and Exit at the end of the block. lock keyword actually handles Monitor class at back end.
+
+ 	For example:
+
+	```cs
+	private static readonly Object objectToControlLock = new Object();
+
+	lock (objectToControlLock)
+	{
+		// critical section
+	}
+	```	
+	But, what really happens:
+	
+	```cs
+	private static readonly Object objectToControlLock = new Object();
+	private bool lockWasTaken = false;
+	
+	var temp = objectToControlLock;
+
+	try
+	{
+		Monitor.Enter(temp, ref lockWasTaken);
+		// critical section
+	}
+	finally
+	{
+		if (lockWasTaken)
+		{
+			Monitor.Exit(temp); 
+		}
+	}
+	```
+
+	You can lock "this" object using this attribute. (It is bad lock using this)
+
+	```cs
+	class BathRoomStall 
+	{
+		[MethodImpl(MethodImplOptions.Synchronized)]
+		public void BeUsed()
+		{
+			Console.WriteLine("Doing our thing...");
+			Thread.Sleep(2000);
+		}
+	}
+	```
+## Lock Conclusions
+ - You must lock the Danger Zone.
+ - You must encapsulate the locks into a class to prevent programmers mistakes.
+ - It is a bad idea use "this" in the lock. Example use the same class as the object to lock.
+ - IMPORTANT - If you have two methods using the same object for lock, remember that it are goint to wait one method complete to go to the second method.
+
+## Race Conditions
+ - Many resources trying to access the Danger Zone at the same time.
+ - It occurs using multi-tread.
 
 ## Mutex
- - TODO
+ - They can be accessed from multiple processes. 
+ - [Named] It is eligible to be a system-wide Mutex that can be accessed from multiple processes.
+ - [Unnamed] It is an anonymous Mutex which can only be accessed within the process in which it is created.
+ - WaitOne method returns true for free critical section and false for busy critical section.
+ - ReleaseMutex release the critical code.
+
+```c
+private readonly Mutex mutex = new Mutex(false, "NamedMutex");
+public void ThreadSafeMethod() {
+    mutex.WaitOne();
+    try {
+        /* critical code */
+    } 
+    finally {
+        mutex.ReleaseMutex();
+    }
+}
+ ```
+
+## Semaphore
+ - They can be named an unnamed just as mutex.
+ - A semaphore does the same as a mutex but allows x number of threads to enter.
  
+ ```c
+ Semaphore semaphoreObject = new Semaphore(initialCount: 0, maximumCount: 5, name: "MyUniqueNameApp");
+
+ semaphoreObject.WaitOne();
+ Console.WriteLine("Doing some stuff");
+ semaphoreObject.Release();
+ ```
+
+## Deadlock
+ - A lock occurs when multiple processes try to access the same resource at the same time.
+    - One process loses out and must wait for the other to finish.  
+ - Is a state in which each member of a group of actions is waiting for some other member to release a lock.
+ - A deadlock occurs when the waiting process is still holding on to another resource that the first needs before it can finish.
+ - A is waiting for B release a resource and B is waiting for A release a resource.
+ - [Prevent] Reduce the need to lock anything as much as you can.
+
 ## Async Await
  - It's a way of work asynchronously in c#.
  - Must return a Task<T> or be void.
@@ -170,6 +266,21 @@ GC.Collect();
 - Executes on the thread pool.
 - It's from the Task Parallel Library.
 - Interface can solve this problem.
+
+## Why string is immutable
+ - We cannot change the value of string.
+ - When we change the value we are creating a new reference for that object with a new value.
+ - It increse the performance.
+ - All strings are getting from the String Pool.
+ 
+ ```c
+ string str = "hello";
+ string str1 = "hello";
+ // Both strings are using the same reference, that is why string is immutable.
+ ```
+
+## StringBuilder
+ - TODO
 
 # Database
 
@@ -196,6 +307,7 @@ GC.Collect();
  - [Advantages] Provides a way to improve the performance of your Queries.
  - [Advantages] They are one of the best ways to improve performance in a database application.
  - [Advantages] Putting in the columns that are queried together will improve your response time.
+ - [Advantages] Increse the performance for JOINs.
  - [Disadvantages] Too many indices may actually decrease performance.
  - [Disadvantages] They decrease performance on inserts, updates, and deletes.
  - You should only create indexes when they are actually needed.
@@ -204,6 +316,8 @@ GC.Collect();
  - A clustered index alters the way that the rows are stored. 
     - With a clustered index the rows are stored physically on the disk in the same order as the index.
  - Every table can have exactly one clustered index.
+ - By default Primary Key is clustered.
+ - You can have clustered for Primary Key and others nonclustered indexes.
  - You can create a clustered index that covers more than one column. For example: create Index index_name(col1, col2, col.....).
 
  ```sql
