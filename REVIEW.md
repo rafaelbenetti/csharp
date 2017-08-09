@@ -23,6 +23,7 @@
 * [Async Await](#async-await)
 * [Inheritance Class Limitation](#inheritance-class-limitation)
 * [Why string is immutable](#why-string-is-immutable)
+* [Stateful vs Stateless](#stateful-vs-stateless)
 * [Joins](#joins)
     * [Inner Join](#inner-join)
     * [Left Join](#left-join)
@@ -281,6 +282,34 @@ public void ThreadSafeMethod() {
 
 ## StringBuilder
  - TODO
+
+## Stateful vs Stateless
+## Stateful
+ - The program has a memory that represents the state.
+ - Web Forms was Stateful, because it keeps some states of the components.
+ - MVC is stateless, but you can manage the state manually using Session, ViewBag, TempData
+
+ ```c
+private int _number = 0;
+
+public int AddOne()
+{
+	_number++;
+return _number;
+}
+ ```
+
+## Stateless
+ - The program has NO memory to represents the state.
+ - HTTP is statelss because it doesn't keep any state of the data.
+
+ ```c
+public int AddOne(int number)
+{
+	number++;
+	return number;
+}
+ ```
 
 # Database
 
