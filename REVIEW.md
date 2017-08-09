@@ -23,6 +23,7 @@
 * [Async Await](#async-await)
 * [Inheritance Class Limitation](#inheritance-class-limitation)
 * [Why string is immutable](#why-string-is-immutable)
+* [StringBuilder](#stringbuilder)
 * [Stateful vs Stateless](#stateful-vs-stateless)
 * [Joins](#joins)
     * [Inner Join](#inner-join)
@@ -269,10 +270,9 @@ public void ThreadSafeMethod() {
 - Interface can solve this problem.
 
 ## Why string is immutable
- - We cannot change the value of string.
- - When we change the value we are creating a new reference for that object with a new value.
- - It increse the performance.
- - All strings are getting from the String Pool.
+ - **Security:** parameters are typically represented as String in network connections, database connection urls, usernames/passwords etc. If it were mutable, these parameters could be easily changed.
+ - **Synchronization and concurrency:** making String immutable automatically makes them thread safe thereby solving the synchronization issues.
+ - **Performance:** strings are reference types and being immutable means that they change only the reference, incresing the performance.
  
  ```c
  string str = "hello";
@@ -280,8 +280,14 @@ public void ThreadSafeMethod() {
  // Both strings are using the same reference, that is why string is immutable.
  ```
 
+ - When we change the value we are creating a new reference for that object with a new value.
+ - All strings are getting from the String Pool.
+
 ## StringBuilder
- - TODO
+ - StringBuilder is mutable so it can change its values.
+ - They are not Thread Safe.
+ - They must be used as local variables.
+ - They increse performance when you have to manipulate parts of strings in runtime.
 
 ## Stateful vs Stateless
 ## Stateful
