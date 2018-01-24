@@ -83,7 +83,11 @@
 
 ## Binary Search Tree
 - It's a very used data structure.
-- TODO
+- It's start from the root.
+- If the value is less than the node, it goes to the left.
+- If the value is bigger than the node, it goes to the right.
+- [ADVANTAGE] It reduces the time of search.
+- [DISADVANTAGE] If it do not have a limit of nodes, can grow up and decrese the performance.
 
 # What is an Algorithm?
 - Used as a tool for mathematical computation.
