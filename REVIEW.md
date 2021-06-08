@@ -27,7 +27,7 @@
 * [Index](#index)
     * [Clustered Index](#clustered-index)
     * [Nonclustered Index](#nonclustered-index)
-
+* [References](#references)
 
 ## Value Types
 - Are stored in an area of memory called stack.
@@ -174,6 +174,115 @@ GC.Collect();
  - They must be used as local variables.
  - They increse performance when you have to manipulate parts of strings in runtime.
 
+## Contructor and types
+ - The constructor is used to initialize the object with some default values.
+ - Types: default constructor, parameterized constructor, copy constructor, static constructor, private constructor.
+
+ ```c# 
+ public class Student
+{
+	private int rollNumber { get; set; }
+	private string fullName { get; set; }         
+	
+	//default constructor          
+	public Student()          
+	{
+	}          
+	
+	//parameterized constructor          
+	public Student(int rNum, string fName)          
+	{              
+		this.rollNumber = rNum;              
+		this.fullName = fName;          
+	}          
+	
+	//static constructor          
+	static Student()          
+	{          
+	}          
+	
+	//copy constructor          
+	public Student(Student student)          
+	{              
+		rollNumber = student.rollNumber;              
+		fullName = student.fullName;          
+	}   
+}
+ ```
+
+## Namespaces
+ - A namespace is a way of organizing classes of the same group or functionality under the same name.
+ - Its not mandatory to set a namespace.
+
+ ```c# 
+ namespace todoApi.models
+{
+    class TodoItem
+    {
+    }
+}
+ ```
+
+## Static 
+- We use the “static” keyword to create a static class, a static method, or static properties
+- Static means that we cannot create the instance of that class. That class can be used directly like ClassName.methodName.
+
+```c#
+public static class Logger
+{
+	public static int log(string message)
+	{
+		Console.WriteLine(message);
+	}
+}
+
+Logger.log("I am a static method");
+```
+
+## Continue vs Break
+- continue keyword will skip the current iteration.
+- break will stop the loop.
+
+## Access Modifiers
+- Public: Can be accessed anywhere without any restriction
+- Protected: Access is limited up to the class, which inherits this class.
+- Internal: Can be accessed only within the current assembly.
+- Private: Cannot be accessed outside of class.
+
+## Anonymous Types
+- Anonymous types allow us to create new types without defining them. 
+
+```c#
+public void print()
+{
+	var data = new
+	{
+			FirstName = "John",
+			SurName = "lastname"
+	};
+
+	Console.WriteLine("First Name : " + data.FirstName);
+}
+```
+
+## Exceptions
+- Try, catch, finally, and throw. These are the keywords used to handle the exception.
+
+```c#
+try
+{
+
+}
+catch (Exception)
+{
+	throw;
+}
+finally
+{
+
+}
+```
+
 ## Stateful vs Stateless
 ## Stateful
  - The program has a memory that represents the state.
@@ -255,3 +364,6 @@ public int AddOne(int number)
  CREATE INDEX IX_TABLE_COLUMN
     ON dbo.TABLE (COLUMN);   
  ```
+
+ ## References 
+  - https://tutorials.eu/50-interview-questions-for-your-csharp-interview/
